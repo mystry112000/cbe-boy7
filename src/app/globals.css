@@ -25,7 +25,39 @@ html {
 
 body {
   background: var(--background);
+  background-image:
+    radial-gradient(ellipse at 20% 50%, oklch(0.65 0.25 290 / 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, oklch(0.55 0.2 250 / 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, oklch(0.7 0.2 150 / 0.03) 0%, transparent 50%);
   color: var(--foreground);
+  background-attachment: fixed;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image:
+    radial-gradient(2px 2px at 10% 20%, oklch(0.65 0.25 290 / 0.15), transparent),
+    radial-gradient(2px 2px at 30% 60%, oklch(0.55 0.2 250 / 0.1), transparent),
+    radial-gradient(2px 2px at 50% 10%, oklch(0.65 0.25 290 / 0.12), transparent),
+    radial-gradient(2px 2px at 70% 80%, oklch(0.55 0.2 250 / 0.1), transparent),
+    radial-gradient(2px 2px at 90% 40%, oklch(0.7 0.2 150 / 0.08), transparent),
+    radial-gradient(2px 2px at 15% 85%, oklch(0.65 0.25 290 / 0.1), transparent),
+    radial-gradient(2px 2px at 60% 55%, oklch(0.55 0.2 250 / 0.08), transparent),
+    radial-gradient(2px 2px at 85% 15%, oklch(0.7 0.2 150 / 0.1), transparent);
+  background-size: 200px 200px;
+  animation: drift 30s linear infinite;
+}
+
+@keyframes drift {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(10px, -10px); }
+  50% { transform: translate(-5px, 15px); }
+  75% { transform: translate(8px, 5px); }
+  100% { transform: translate(0, 0); }
 }
 
 ::-webkit-scrollbar {
@@ -72,8 +104,8 @@ body {
 }
 
 .grid-bg {
-  background-image: linear-gradient(oklch(0.2 0.02 270 / 0.1) 1px, transparent 1px),
-                    linear-gradient(90deg, oklch(0.2 0.02 270 / 0.1) 1px, transparent 1px);
+  background-image: linear-gradient(oklch(0.65 0.25 290 / 0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, oklch(0.65 0.25 290 / 0.05) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 
