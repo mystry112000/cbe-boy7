@@ -75,8 +75,12 @@ export default function ChatPage() {
   }, [])
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [streamContent])
+    if (!endRef.current) return
+    const parent = endRef.current.parentElement
+    if (parent && parent.scrollHeight - parent.scrollTop - parent.clientHeight < 200) {
+      endRef.current.scrollIntoView({ behavior: "auto" })
+    }
+  }, [messages, streamContent])
 
   const activeConv = conversations.find((c) => c.id === activeId)
   const messages = activeConv?.messages || []
