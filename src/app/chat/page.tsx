@@ -132,36 +132,38 @@ export default function ChatPage() {
   }
 
   async function handleSend() {
-    if (!input.trim() || streaming) return
-
-    const inputText = input
-    setStreamContent("")
-
-    const config = getConfig()
-
-    const userMsg: Message = { role: "user", content: inputText, id: genId() }
-
-    updateConversation(activeId, (c) => ({
-      ...c,
-      title: c.messages.length <= 1 ? inputText.slice(0, 50) : c.title,
-      messages: [...c.messages, userMsg],
-    }))
-
-    setInput("")
-    if (inputRef.current) inputRef.current.style.height = "auto"
-
-    setStreaming(true)
-
-    const currentConv = conversationsRef.current.find((c) => c.id === activeId)
-    const allMessages = [...(currentConv?.messages || []), userMsg]
-
-    const controller = new AbortController()
-    abortRef.current = controller
-
     let timedOut = false
-    const timeoutId = setTimeout(() => { timedOut = true; controller.abort() }, 25000)
+    let timeoutId: ReturnType<typeof setTimeout> | undefined
 
     try {
+      if (!input.trim() || streaming) return
+
+      const inputText = input
+      setStreamContent("")
+
+      const config = getConfig()
+
+      const userMsg: Message = { role: "user", content: inputText, id: genId() }
+
+      updateConversation(activeId, (c) => ({
+        ...c,
+        title: c.messages.length <= 1 ? inputText.slice(0, 50) : c.title,
+        messages: [...c.messages, userMsg],
+      }))
+
+      setInput("")
+      if (inputRef.current) inputRef.current.style.height = "auto"
+
+      setStreaming(true)
+
+      const currentConv = conversationsRef.current.find((c) => c.id === activeId)
+      const allMessages = [...(currentConv?.messages || []), userMsg]
+
+      const controller = new AbortController()
+      abortRef.current = controller
+
+      timeoutId = setTimeout(() => { timedOut = true; controller.abort() }, 30000)
+
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -228,7 +230,7 @@ export default function ChatPage() {
       if (err.name !== "AbortError") {
         setStreamContent(`**Error:** ${err.message}`)
       } else if (timedOut) {
-        setStreamContent(`**Error:** Request timed out. OpenRouter free tier might be slow — try again or set an API key in Settings.`)
+        setStreamContent(`**Error:** Request timed out after 30s. OpenRouter free tier may be slow — try again or add an API key in Settings.`)
       }
     } finally {
       clearTimeout(timeoutId)
