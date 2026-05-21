@@ -248,7 +248,7 @@ export default function ChatPage() {
             {conversations.map((conv) => (
               <div key={conv.id} onClick={() => { setActiveId(conv.id); setStreamContent("") }} className={`group flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-sm transition-colors ${conv.id === activeId ? "bg-[oklch(0.65_0.25_290/0.1)] text-[oklch(0.85_0.02_270)]" : "text-[oklch(0.5_0.02_270)] hover:bg-[oklch(0.09_0.01_270/0.5)]"}`}>
                 <span className="truncate flex-1">{conv.title}</span>
-                {conversations.length > 1 && (
+                {(
                   <button onClick={(e) => { e.stopPropagation(); handleDeleteChat(conv.id) }} className="opacity-0 group-hover:opacity-100 text-[oklch(0.3_0.02_270)] hover:text-red-400 transition-all text-xs">✕</button>
                 )}
               </div>
