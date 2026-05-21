@@ -158,6 +158,9 @@ export default function ChatPage() {
     const controller = new AbortController()
     abortRef.current = controller
 
+    let timedOut = false
+    const timeoutId = setTimeout(() => { timedOut = true; controller.abort() }, 25000)
+
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
@@ -224,8 +227,11 @@ export default function ChatPage() {
     } catch (err: any) {
       if (err.name !== "AbortError") {
         setStreamContent(`**Error:** ${err.message}`)
+      } else if (timedOut) {
+        setStreamContent(`**Error:** Request timed out. OpenRouter free tier might be slow — try again or set an API key in Settings.`)
       }
     } finally {
+      clearTimeout(timeoutId)
       setStreaming(false)
       abortRef.current = null
     }
