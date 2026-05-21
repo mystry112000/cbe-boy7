@@ -11,7 +11,7 @@ const providers = [
     desc: "Access many models (including free ones) with one API",
     url: "https://openrouter.ai/keys",
     defaultChat: "openrouter/free",
-    defaultImage: "black-forest-labs/flux-schnell",
+    defaultImage: "google/gemini-2.5-flash-image",
   },
   {
     id: "openai" as const,

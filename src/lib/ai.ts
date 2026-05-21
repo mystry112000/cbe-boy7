@@ -9,7 +9,7 @@ const DEFAULTS: AIConfig = {
   provider: "openrouter",
   apiKey: "",
   chatModel: "openrouter/free",
-  imageModel: "black-forest-labs/flux-schnell",
+  imageModel: "google/gemini-2.5-flash-image",
 }
 
 export function getConfig(): AIConfig {
