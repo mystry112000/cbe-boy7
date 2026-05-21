@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
         ...(provider === "openrouter" ? { "HTTP-Referer": "https://zeno-ai-wine.vercel.app", "X-Title": "Zeno AI" } : {}),
       },
       body: JSON.stringify({
-        model: model || "dall-e-3",
+        model: model || (provider === "openrouter" ? "black-forest-labs/flux-schnell" : "dall-e-3"),
         prompt,
         n: 4,
         size,
