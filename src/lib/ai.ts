@@ -6,10 +6,10 @@ export interface AIConfig {
 }
 
 const DEFAULTS: AIConfig = {
-  provider: "g4f",
+  provider: "openrouter",
   apiKey: "",
-  chatModel: "gpt-4o-mini",
-  imageModel: "",
+  chatModel: "openrouter/free",
+  imageModel: "google/gemini-2.5-flash-image",
 }
 
 export function getConfig(): AIConfig {
