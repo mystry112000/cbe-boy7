@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
           : {}),
       },
       body: JSON.stringify({
-        model: model || "mistralai/mistral-7b-instruct:free",
+        model: model || "openrouter/free",
         messages: messages.map((m: any) => ({ role: m.role, content: m.content })),
         stream: true,
       }),

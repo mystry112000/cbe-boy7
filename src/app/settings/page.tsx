@@ -10,7 +10,7 @@ const providers = [
     name: "OpenRouter",
     desc: "Access many models (including free ones) with one API",
     url: "https://openrouter.ai/keys",
-    defaultChat: "openai/gpt-oss-20b:free",
+    defaultChat: "openrouter/free",
     defaultImage: "black-forest-labs/flux-schnell",
   },
   {
@@ -164,7 +164,8 @@ export default function SettingsPage() {
           <div className="rounded-xl bg-[oklch(0.65_0.25_290/0.08)] border border-[oklch(0.65_0.25_290/0.15)] p-4">
             <p className="text-xs text-[oklch(0.6_0.02_270)]">
               <strong>Works out of the box!</strong> OpenRouter is pre-configured with a server-side key —
-              just select it and start using the app. If you want to use your own key or a different provider,
+              just select it and start using the app. Chat model <code className="text-[oklch(0.65_0.25_290)]">openrouter/free</code>
+              automatically routes to the best free model. If you want to use your own key or a different provider,
               paste it above and it'll be stored locally in your browser.
             </p>
           </div>
