@@ -15,7 +15,7 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "cbe_boy7 | Private AI for Unlimited Creative Freedom",
+  title: "Zeno AI | Private AI for Unlimited Creative Freedom",
   description: "Access leading AI models with your privacy in mind. Generate text, images, video, code, and more.",
 }
 

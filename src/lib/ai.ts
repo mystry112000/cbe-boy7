@@ -15,7 +15,7 @@ const DEFAULTS: AIConfig = {
 export function getConfig(): AIConfig {
   if (typeof window === "undefined") return DEFAULTS
   try {
-    const stored = localStorage.getItem("cbe_boy7_config")
+    const stored = localStorage.getItem("zeno_config")
     if (stored) return { ...DEFAULTS, ...JSON.parse(stored) }
   } catch {}
   return DEFAULTS
@@ -24,7 +24,7 @@ export function getConfig(): AIConfig {
 export function saveConfig(config: Partial<AIConfig>) {
   const current = getConfig()
   const updated = { ...current, ...config }
-  localStorage.setItem("cbe_boy7_config", JSON.stringify(updated))
+  localStorage.setItem("zeno_config", JSON.stringify(updated))
   return updated
 }
 

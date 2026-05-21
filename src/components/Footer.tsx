@@ -41,7 +41,7 @@ export default function Footer() {
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[oklch(0.65_0.25_290)] to-[oklch(0.55_0.2_250)] flex items-center justify-center">
                 <Sparkles className="w-4 h-4 text-white" />
               </div>
-              <span className="text-lg font-semibold">cbe_boy7</span>
+              <span className="text-lg font-semibold">Zeno</span>
             </Link>
             <p className="text-sm text-[oklch(0.5_0.02_270)] max-w-xs">
               Private, uncensored AI for unlimited creative freedom.
@@ -66,7 +66,8 @@ export default function Footer() {
           ))}
         </div>
         <div className="mt-12 pt-8 border-t border-[oklch(0.2_0.02_270/0.5)] text-center text-sm text-[oklch(0.4_0.02_270)]">
-          &copy; {new Date().getFullYear()} cbe_boy7. All rights reserved.
+          <p>&copy; {new Date().getFullYear()} Zeno. All rights reserved.</p>
+          <p className="mt-2 text-xs text-[oklch(0.35_0.02_270)]">Made by Adhithya</p>
         </div>
       </div>
     </footer>

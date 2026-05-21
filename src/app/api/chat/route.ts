@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
         ...(provider === "openrouter"
-          ? { "HTTP-Referer": "https://cbe-boy7.vercel.app", "X-Title": "cbe_boy7" }
+          ? { "HTTP-Referer": "https://zeno-ai.vercel.app", "X-Title": "Zeno AI" }
           : {}),
       },
       body: JSON.stringify({

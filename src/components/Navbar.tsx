@@ -22,7 +22,7 @@ export default function Navbar() {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[oklch(0.65_0.25_290)] to-[oklch(0.55_0.2_250)] flex items-center justify-center">
               <Sparkles className="w-4 h-4 text-white" />
             </div>
-            <span className="text-lg font-semibold tracking-tight">cbe_boy7</span>
+            <span className="text-lg font-semibold tracking-tight">Zeno</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-8">

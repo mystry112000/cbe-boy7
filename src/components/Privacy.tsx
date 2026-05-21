@@ -40,7 +40,7 @@ export default function Privacy() {
             AI that respects your privacy
           </h2>
           <p className="text-lg text-[oklch(0.6_0.02_270)] max-w-2xl mx-auto">
-            While others log and analyze your prompts, cbe_boy7 ensures your conversations remain yours alone.
+            While others log and analyze your prompts, Zeno ensures your conversations remain yours alone.
           </p>
         </div>
 

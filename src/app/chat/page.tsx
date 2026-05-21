@@ -27,7 +27,7 @@ function genId() {
 function loadConversations(): Conversation[] {
   if (typeof window === "undefined") return []
   try {
-    const raw = localStorage.getItem("cbe_boy7_chats")
+    const raw = localStorage.getItem("zeno_chats")
     return raw ? JSON.parse(raw) : []
   } catch {
     return []
@@ -35,7 +35,7 @@ function loadConversations(): Conversation[] {
 }
 
 function saveConversations(chats: Conversation[]) {
-  localStorage.setItem("cbe_boy7_chats", JSON.stringify(chats))
+  localStorage.setItem("zeno_chats", JSON.stringify(chats))
 }
 
 function newConversation(): Conversation {
