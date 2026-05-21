@@ -54,12 +54,14 @@ export default function Privacy() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="p-6 rounded-2xl border border-[oklch(0.2_0.02_270/0.5)] bg-[oklch(0.09_0.01_270/0.3)]"
+                className="group perspective-1000"
               >
-                <span className="text-xs font-mono text-[oklch(0.65_0.25_290)] mb-3 block">{tier.level}</span>
-                <Icon className="w-8 h-8 text-[oklch(0.65_0.25_290)] mb-3" />
-                <h3 className="text-base font-semibold mb-2">{tier.title}</h3>
-                <p className="text-sm text-[oklch(0.5_0.02_270)]">{tier.description}</p>
+                <div className="p-6 rounded-2xl border border-[oklch(0.2_0.02_270/0.5)] glass h-full transition-all duration-300 hover:border-[oklch(0.65_0.25_290/0.3)] hover:shadow-[0_0_30px_oklch(0.65_0.25_290/0.08)] hover:scale-[1.03]">
+                  <span className="text-xs font-mono text-[oklch(0.65_0.25_290)] mb-3 block">{tier.level}</span>
+                  <Icon className="w-8 h-8 text-[oklch(0.65_0.25_290)] mb-3" />
+                  <h3 className="text-base font-semibold mb-2">{tier.title}</h3>
+                  <p className="text-sm text-[oklch(0.5_0.02_270)]">{tier.description}</p>
+                </div>
               </motion.div>
             )
           })}

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Send, Bot, User, Sparkles, Settings, Plus } from "lucide-react"
+import { Send, Bot, User, Sparkles, Settings, Plus, Square } from "lucide-react"
 import Link from "next/link"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
@@ -81,7 +81,7 @@ export default function ChatPage() {
     if (!endRef.current) return
     const parent = endRef.current.parentElement
     if (parent && parent.scrollHeight - parent.scrollTop - parent.clientHeight < 200) {
-      endRef.current.scrollIntoView({ behavior: "auto" })
+      endRef.current.scrollIntoView({ behavior: "smooth" })
     }
   }, [streamContent, messages])
 
@@ -123,11 +123,19 @@ export default function ChatPage() {
     }
   }
 
+  function autoResize() {
+    const el = inputRef.current
+    if (el) {
+      el.style.height = "auto"
+      el.style.height = Math.min(el.scrollHeight, 160) + "px"
+    }
+  }
+
   async function handleSend() {
     if (!input.trim() || streaming) return
 
     const inputText = input
-    setInput("")
+    setStreamContent("")
 
     const config = getConfig()
 
@@ -139,8 +147,10 @@ export default function ChatPage() {
       messages: [...c.messages, userMsg],
     }))
 
+    setInput("")
+    if (inputRef.current) inputRef.current.style.height = "auto"
+
     setStreaming(true)
-    setStreamContent("")
 
     const currentConv = conversationsRef.current.find((c) => c.id === activeId)
     const allMessages = [...(currentConv?.messages || []), userMsg]
@@ -234,20 +244,20 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="min-h-screen pt-16 flex">
+    <div className="min-h-screen pt-14 flex">
       {sidebarOpen && (
         <>
-          <div className="fixed inset-0 bg-black/50 z-30 md:hidden" onClick={() => setSidebarOpen(false)} />
-          <div className="w-64 border-r border-[oklch(0.2_0.02_270/0.5)] bg-[oklch(0.04_0.005_270)] flex flex-col fixed md:relative z-40 inset-y-0 left-0 pt-16 md:pt-0">
+          <div className="fixed inset-0 bg-black/50 z-30 md:hidden animate-fade-in" onClick={() => setSidebarOpen(false)} />
+          <div className="w-64 border-r border-[oklch(0.2_0.02_270/0.5)] glass-strong flex flex-col fixed md:relative z-40 inset-y-0 left-0 pt-14 md:pt-0 animate-slide-in-left">
             <div className="p-3 border-b border-[oklch(0.2_0.02_270/0.5)]">
-              <button onClick={handleNewChat} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-[oklch(0.2_0.02_270/0.5)] text-sm text-[oklch(0.5_0.02_270)] hover:bg-[oklch(0.09_0.01_270/0.5)] hover:text-[oklch(0.8_0.02_270)] transition-all">
+              <button onClick={handleNewChat} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-[oklch(0.2_0.02_270/0.5)] text-sm text-[oklch(0.5_0.02_270)] hover:bg-[oklch(0.65_0.25_290/0.1)] hover:text-[oklch(0.8_0.02_270)] hover:border-[oklch(0.65_0.25_290/0.3)] transition-all duration-200">
                 <Plus className="w-4 h-4" />
                 New chat
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-2 space-y-1 scrollbar-hide">
-              {conversations.map((conv) => (
-                <div key={conv.id} onClick={() => { setActiveId(conv.id); setStreamContent(""); window.innerWidth < 768 && setSidebarOpen(false) }} className={`group flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-sm transition-colors ${conv.id === activeId ? "bg-[oklch(0.65_0.25_290/0.1)] text-[oklch(0.85_0.02_270)]" : "text-[oklch(0.5_0.02_270)] hover:bg-[oklch(0.09_0.01_270/0.5)]"}`}>
+              {conversations.map((conv, i) => (
+                <div key={conv.id} style={{ animationDelay: `${i * 30}ms` }} onClick={() => { setActiveId(conv.id); setStreamContent(""); window.innerWidth < 768 && setSidebarOpen(false) }} className={`group flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-sm transition-all duration-200 animate-fade-in-up ${conv.id === activeId ? "bg-[oklch(0.65_0.25_290/0.12)] text-[oklch(0.85_0.02_270)] border border-[oklch(0.65_0.25_290/0.2)]" : "text-[oklch(0.5_0.02_270)] hover:bg-[oklch(0.65_0.25_290/0.05)] hover:text-[oklch(0.7_0.02_270)]"}`}>
                   <span className="truncate flex-1">{conv.title}</span>
                   {(
                     <button onClick={(e) => { e.stopPropagation(); handleDeleteChat(conv.id) }} className="opacity-0 group-hover:opacity-100 text-[oklch(0.3_0.02_270)] hover:text-red-400 transition-all text-xs">✕</button>
@@ -256,7 +266,7 @@ export default function ChatPage() {
               ))}
             </div>
             <div className="p-3 border-t border-[oklch(0.2_0.02_270/0.5)]">
-              <Link href="/settings" className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-[oklch(0.5_0.02_270)] hover:bg-[oklch(0.09_0.01_270/0.5)] hover:text-[oklch(0.8_0.02_270)] transition-all">
+              <Link href="/settings" className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-[oklch(0.5_0.02_270)] hover:bg-[oklch(0.65_0.25_290/0.08)] hover:text-[oklch(0.8_0.02_270)] transition-all duration-200">
                 <Settings className="w-4 h-4" />
                 Settings
               </Link>
@@ -267,26 +277,28 @@ export default function ChatPage() {
 
       <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full px-4">
         <div className="flex items-center gap-3 py-3 border-b border-[oklch(0.2_0.02_270/0.5)]">
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-1.5 rounded-lg hover:bg-[oklch(0.09_0.01_270/0.5)] transition-colors">
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-1.5 rounded-lg hover:bg-[oklch(0.65_0.25_290/0.1)] transition-colors">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
             </svg>
           </button>
           <div className="flex items-center gap-2">
-            <Bot className="w-5 h-5 text-[oklch(0.65_0.25_290)]" />
+            <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[oklch(0.65_0.25_290)] to-[oklch(0.55_0.2_250)] flex items-center justify-center">
+              <Bot className="w-3.5 h-3.5 text-white" />
+            </div>
             <span className="font-semibold">{activeConv?.title || "Chat"}</span>
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto py-6 space-y-6 scrollbar-hide">
-          {messages.map((msg) => (
-            <div key={msg.id} className={`flex gap-4 ${msg.role === "user" ? "justify-end" : ""}`}>
+        <div className="flex-1 overflow-y-auto py-6 space-y-4 scrollbar-hide">
+          {messages.map((msg, i) => (
+            <div key={msg.id} className={`flex gap-3 animate-fade-in-up ${msg.role === "user" ? "justify-end" : ""}`} style={{ animationDelay: `${i * 50}ms` }}>
               {msg.role === "assistant" && (
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[oklch(0.65_0.25_290)] to-[oklch(0.55_0.2_250)] flex items-center justify-center shrink-0 mt-1">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[oklch(0.65_0.25_290)] to-[oklch(0.55_0.2_250)] flex items-center justify-center shrink-0 mt-1 shadow-lg shadow-[oklch(0.65_0.25_290/0.2)]">
                   <Bot className="w-4 h-4 text-white" />
                 </div>
               )}
-              <div className={`max-w-[80%] rounded-2xl px-4 py-3 overflow-hidden ${msg.role === "user" ? "bg-gradient-to-r from-[oklch(0.65_0.25_290/0.2)] to-[oklch(0.55_0.2_250/0.2)] border border-[oklch(0.65_0.25_290/0.2)]" : "bg-[oklch(0.09_0.01_270/0.5)] border border-[oklch(0.2_0.02_270/0.5)]"}`}>
+              <div className={`max-w-[80%] rounded-2xl px-4 py-3 overflow-hidden ${msg.role === "user" ? "bg-gradient-to-r from-[oklch(0.65_0.25_290/0.2)] to-[oklch(0.55_0.2_250/0.15)] border border-[oklch(0.65_0.25_290/0.15)] shadow-sm" : "glass border border-[oklch(0.2_0.02_270/0.4)]"}`}>
                 {msg.role === "assistant" ? (
                   <div className="prose prose-invert prose-sm max-w-none">
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
@@ -296,7 +308,7 @@ export default function ChatPage() {
                 )}
               </div>
               {msg.role === "user" && (
-                <div className="w-8 h-8 rounded-lg bg-[oklch(0.3_0.05_270)] flex items-center justify-center shrink-0 mt-1">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[oklch(0.4_0.05_270)] to-[oklch(0.3_0.05_270)] flex items-center justify-center shrink-0 mt-1">
                   <User className="w-4 h-4 text-white" />
                 </div>
               )}
@@ -304,15 +316,25 @@ export default function ChatPage() {
           ))}
 
           {streaming && (
-            <div className="flex gap-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[oklch(0.65_0.25_290)] to-[oklch(0.55_0.2_250)] flex items-center justify-center shrink-0 mt-1">
+            <div className="flex gap-3 animate-fade-in-up">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[oklch(0.65_0.25_290)] to-[oklch(0.55_0.2_250)] flex items-center justify-center shrink-0 mt-1 shadow-lg shadow-[oklch(0.65_0.25_290/0.2)]">
                 <Bot className="w-4 h-4 text-white" />
               </div>
-              <div className="bg-[oklch(0.09_0.01_270/0.5)] border border-[oklch(0.2_0.02_270/0.5)] rounded-2xl px-4 py-3 max-w-[80%]">
-                <div className="prose prose-invert prose-sm max-w-none">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{streamContent || "▊"}</ReactMarkdown>
-                </div>
-                {streamContent && <span className="inline-block w-2 h-4 bg-[oklch(0.65_0.25_290)] animate-pulse ml-0.5" />}
+              <div className="glass border border-[oklch(0.2_0.02_270/0.4)] rounded-2xl px-4 py-3 max-w-[80%] min-w-[100px]">
+                {streamContent ? (
+                  <>
+                    <div className="prose prose-invert prose-sm max-w-none">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{streamContent}</ReactMarkdown>
+                    </div>
+                    <span className="inline-block w-2 h-4 bg-gradient-to-b from-[oklch(0.65_0.25_290)] to-[oklch(0.55_0.2_250)] animate-pulse ml-0.5 rounded-sm" />
+                  </>
+                ) : (
+                  <div className="flex items-center gap-1.5 py-1">
+                    <span className="w-2 h-2 rounded-full bg-[oklch(0.65_0.25_290/0.6)] typing-dot" />
+                    <span className="w-2 h-2 rounded-full bg-[oklch(0.65_0.25_290/0.6)] typing-dot" />
+                    <span className="w-2 h-2 rounded-full bg-[oklch(0.65_0.25_290/0.6)] typing-dot" />
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -322,16 +344,20 @@ export default function ChatPage() {
 
         <div className="py-4 border-t border-[oklch(0.2_0.02_270/0.5)]">
           <div className="flex gap-3">
-            <textarea ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend() } }} placeholder={streaming ? "AI is responding..." : "Type a message..."} disabled={streaming} rows={1} className="flex-1 px-4 py-3 rounded-xl bg-[oklch(0.09_0.01_270/0.5)] border border-[oklch(0.2_0.02_270/0.5)] text-sm text-foreground placeholder-[oklch(0.4_0.02_270)] outline-none focus:border-[oklch(0.65_0.25_290/0.5)] transition-colors disabled:opacity-50 resize-none" />
+            <div className="flex-1 relative">
+              <textarea ref={inputRef} value={input} onChange={(e) => { setInput(e.target.value); autoResize() }} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend() } }} placeholder={streaming ? "AI is responding..." : "Type a message..."} disabled={streaming} rows={1} className="w-full px-4 py-3 pr-12 rounded-xl glass border border-[oklch(0.2_0.02_270/0.5)] text-sm text-foreground placeholder-[oklch(0.4_0.02_270)] outline-none focus:border-[oklch(0.65_0.25_290/0.4)] focus:shadow-[0_0_20px_oklch(0.65_0.25_290/0.08)] transition-all duration-200 disabled:opacity-50 resize-none max-h-40" />
+            </div>
             {streaming ? (
-              <button onClick={handleStop} className="px-4 py-3 rounded-xl bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30 transition-all">■</button>
+              <button onClick={handleStop} className="px-4 py-3 rounded-xl bg-red-500/15 border border-red-500/25 text-red-400 hover:bg-red-500/25 hover:shadow-[0_0_20px_oklch(0.6_0.2_0/0.15)] transition-all duration-200">
+                <Square className="w-4 h-4" />
+              </button>
             ) : (
-              <button onClick={handleSend} disabled={!input.trim()} className="px-4 py-3 rounded-xl bg-gradient-to-r from-[oklch(0.65_0.25_290)] to-[oklch(0.55_0.2_250)] text-white hover:opacity-90 transition-opacity disabled:opacity-50">
+              <button onClick={handleSend} disabled={!input.trim()} className="px-4 py-3 rounded-xl bg-gradient-to-r from-[oklch(0.65_0.25_290)] to-[oklch(0.55_0.2_250)] text-white hover:shadow-[0_0_25px_oklch(0.65_0.25_290/0.3)] transition-all duration-200 disabled:opacity-40 disabled:hover:shadow-none">
                 <Send className="w-4 h-4" />
               </button>
             )}
           </div>
-          <p className="text-xs text-[oklch(0.4_0.02_270)] mt-3 text-center">API key is stored locally. No data is logged on our servers.</p>
+          <p className="text-xs text-[oklch(0.4_0.02_270)] mt-3 text-center">Powered by OpenRouter · No data is logged on our servers</p>
         </div>
       </div>
     </div>

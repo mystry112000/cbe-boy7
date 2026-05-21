@@ -49,14 +49,16 @@ export default function SettingsPage() {
 
   return (
     <div className="min-h-screen pt-24 pb-16">
-      <div className="absolute inset-0 grid-bg opacity-30" />
+      <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
       <div className="relative z-10 max-w-2xl mx-auto px-4">
-        <div className="flex items-center gap-2 mb-8">
-          <Sparkles className="w-5 h-5 text-[oklch(0.65_0.25_290)]" />
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[oklch(0.65_0.25_290)] to-[oklch(0.55_0.2_250)] flex items-center justify-center shadow-lg shadow-[oklch(0.65_0.25_290/0.2)]">
+            <Sparkles className="w-5 h-5 text-white" />
+          </div>
           <h1 className="text-2xl font-bold">Settings</h1>
         </div>
 
-        <div className="rounded-2xl border border-[oklch(0.2_0.02_270/0.5)] bg-[oklch(0.09_0.01_270/0.3)] p-8 space-y-8">
+        <div className="rounded-2xl border border-[oklch(0.2_0.02_270/0.5)] glass p-8 space-y-8">
           <div>
             <label className="block text-sm font-medium mb-3">AI Provider</label>
             <div className="grid gap-3">
@@ -64,10 +66,10 @@ export default function SettingsPage() {
                 <button
                   key={p.id}
                   onClick={() => setConfig({ ...config, provider: p.id, chatModel: p.defaultChat, imageModel: p.defaultImage })}
-                  className={`text-left p-4 rounded-xl border transition-all ${
+                  className={`text-left p-4 rounded-xl border transition-all duration-200 ${
                     config.provider === p.id
-                      ? "border-[oklch(0.65_0.25_290)] bg-[oklch(0.65_0.25_290/0.08)]"
-                      : "border-[oklch(0.2_0.02_270/0.5)] hover:bg-[oklch(0.09_0.01_270/0.5)]"
+                      ? "border-[oklch(0.65_0.25_290)] bg-[oklch(0.65_0.25_290/0.1)] shadow-[0_0_20px_oklch(0.65_0.25_290/0.08)]"
+                      : "border-[oklch(0.2_0.02_270/0.5)] hover:border-[oklch(0.65_0.25_290/0.3)] hover:bg-[oklch(0.65_0.25_290/0.04)]"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
@@ -102,7 +104,7 @@ export default function SettingsPage() {
               value={config.apiKey}
               onChange={(e) => setConfig({ ...config, apiKey: e.target.value })}
               placeholder={config.provider === "openrouter" ? "Leave blank to use server key" : "sk-..."}
-              className="w-full px-4 py-3 rounded-xl bg-[oklch(0.06_0.01_270)] border border-[oklch(0.2_0.02_270/0.5)] text-sm font-mono text-foreground placeholder-[oklch(0.4_0.02_270)] outline-none focus:border-[oklch(0.65_0.25_290/0.5)] transition-colors"
+              className="w-full px-4 py-3 rounded-xl bg-[oklch(0.06_0.01_270)] border border-[oklch(0.2_0.02_270/0.5)] text-sm font-mono text-foreground placeholder-[oklch(0.4_0.02_270)] outline-none focus:border-[oklch(0.65_0.25_290/0.4)] focus:shadow-[0_0_20px_oklch(0.65_0.25_290/0.08)] transition-all duration-200"
             />
           </div>
 
@@ -115,7 +117,7 @@ export default function SettingsPage() {
                   value={config.chatModel}
                   onChange={(e) => setConfig({ ...config, chatModel: e.target.value })}
                   placeholder={currentProvider?.defaultChat}
-                  className="w-full px-4 py-3 rounded-xl bg-[oklch(0.06_0.01_270)] border border-[oklch(0.2_0.02_270/0.5)] text-sm font-mono text-foreground placeholder-[oklch(0.4_0.02_270)] outline-none focus:border-[oklch(0.65_0.25_290/0.5)] transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-[oklch(0.06_0.01_270)] border border-[oklch(0.2_0.02_270/0.5)] text-sm font-mono text-foreground placeholder-[oklch(0.4_0.02_270)] outline-none focus:border-[oklch(0.65_0.25_290/0.4)] focus:shadow-[0_0_20px_oklch(0.65_0.25_290/0.08)] transition-all duration-200"
                 />
               </div>
               <div>
@@ -125,7 +127,7 @@ export default function SettingsPage() {
                   value={config.imageModel}
                   onChange={(e) => setConfig({ ...config, imageModel: e.target.value })}
                   placeholder={currentProvider?.defaultImage || "N/A"}
-                  className="w-full px-4 py-3 rounded-xl bg-[oklch(0.06_0.01_270)] border border-[oklch(0.2_0.02_270/0.5)] text-sm font-mono text-foreground placeholder-[oklch(0.4_0.02_270)] outline-none focus:border-[oklch(0.65_0.25_290/0.5)] transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-[oklch(0.06_0.01_270)] border border-[oklch(0.2_0.02_270/0.5)] text-sm font-mono text-foreground placeholder-[oklch(0.4_0.02_270)] outline-none focus:border-[oklch(0.65_0.25_290/0.4)] focus:shadow-[0_0_20px_oklch(0.65_0.25_290/0.08)] transition-all duration-200"
                 />
               </div>
             </div>
@@ -139,14 +141,14 @@ export default function SettingsPage() {
                 value={config.chatModel}
                 onChange={(e) => setConfig({ ...config, chatModel: e.target.value })}
                 placeholder="gemini-2.0-flash"
-                className="w-full px-4 py-3 rounded-xl bg-[oklch(0.06_0.01_270)] border border-[oklch(0.2_0.02_270/0.5)] text-sm font-mono text-foreground placeholder-[oklch(0.4_0.02_270)] outline-none focus:border-[oklch(0.65_0.25_290/0.5)] transition-colors"
+                className="w-full px-4 py-3 rounded-xl bg-[oklch(0.06_0.01_270)] border border-[oklch(0.2_0.02_270/0.5)] text-sm font-mono text-foreground placeholder-[oklch(0.4_0.02_270)] outline-none focus:border-[oklch(0.65_0.25_290/0.4)] focus:shadow-[0_0_20px_oklch(0.65_0.25_290/0.08)] transition-all duration-200"
               />
             </div>
           )}
 
           <button
             onClick={handleSave}
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-[oklch(0.65_0.25_290)] to-[oklch(0.55_0.2_250)] text-white font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-[oklch(0.65_0.25_290)] to-[oklch(0.55_0.2_250)] text-white font-medium hover:shadow-[0_0_25px_oklch(0.65_0.25_290/0.3)] transition-all duration-200 flex items-center justify-center gap-2"
           >
             {saved ? (
               <>

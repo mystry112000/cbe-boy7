@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { MessageSquare, Image, Video, Music, Code, Search, Lock, Cpu } from "lucide-react"
+import { MessageSquare, Image, Video, Music, Code, Lock } from "lucide-react"
 
 const features = [
   {
@@ -66,13 +66,15 @@ export default function Features() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="group relative p-6 rounded-2xl border border-[oklch(0.2_0.02_270/0.5)] bg-[oklch(0.09_0.01_270/0.3)] hover:bg-[oklch(0.12_0.01_270/0.5)] transition-all hover:border-[oklch(0.3_0.02_270/0.5)]"
+                className="group perspective-1000"
               >
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.gradient} p-2.5 mb-4`}>
-                  <Icon className="w-full h-full text-white" />
+                <div className="relative p-6 rounded-2xl border border-[oklch(0.2_0.02_270/0.5)] glass hover:border-[oklch(0.65_0.25_290/0.3)] transition-all duration-300 hover:shadow-[0_0_30px_oklch(0.65_0.25_290/0.08)] hover:scale-[1.02]">
+                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.gradient} p-2.5 mb-4 shadow-lg`}>
+                    <Icon className="w-full h-full text-white" />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                  <p className="text-sm text-[oklch(0.5_0.02_270)]">{feature.description}</p>
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                <p className="text-sm text-[oklch(0.5_0.02_270)]">{feature.description}</p>
               </motion.div>
             )
           })}

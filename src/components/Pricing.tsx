@@ -61,6 +61,7 @@ export default function Pricing() {
   return (
     <section className="py-24 relative" id="pricing">
       <div className="absolute inset-0 grid-bg opacity-30" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[oklch(0.65_0.25_290/0.03)] blur-[120px] pointer-events-none" />
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
@@ -79,14 +80,14 @@ export default function Pricing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className={`relative rounded-2xl p-8 ${
+              className={`relative rounded-2xl p-8 transition-all duration-300 perspective-1000 ${
                 plan.featured
-                  ? "border-2 border-[oklch(0.65_0.25_290/0.5)] bg-[oklch(0.09_0.01_270/0.8)] glow"
-                  : "border border-[oklch(0.2_0.02_270/0.5)] bg-[oklch(0.09_0.01_270/0.3)]"
+                  ? "border-2 border-[oklch(0.65_0.25_290/0.5)] glass-strong glow hover:shadow-[0_0_50px_oklch(0.65_0.25_290/0.15)]"
+                  : "border border-[oklch(0.2_0.02_270/0.5)] glass hover:border-[oklch(0.65_0.25_290/0.3)] hover:shadow-[0_0_30px_oklch(0.65_0.25_290/0.08)] hover:scale-[1.02]"
               }`}
             >
               {plan.featured && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-[oklch(0.65_0.25_290)] to-[oklch(0.55_0.2_250)] text-xs font-medium text-white">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-[oklch(0.65_0.25_290)] to-[oklch(0.55_0.2_250)] text-xs font-medium text-white shadow-lg">
                   Most Popular
                 </div>
               )}
@@ -110,10 +111,10 @@ export default function Pricing() {
               </ul>
               <Link
                 href={plan.href}
-                className={`block text-center py-3 rounded-xl font-medium transition-all ${
+                className={`block text-center py-3 rounded-xl font-medium transition-all duration-200 ${
                   plan.featured
-                    ? "bg-gradient-to-r from-[oklch(0.65_0.25_290)] to-[oklch(0.55_0.2_250)] text-white hover:opacity-90"
-                    : "border border-[oklch(0.2_0.02_270/0.5)] text-[oklch(0.8_0.02_270)] hover:bg-[oklch(0.12_0.01_270/0.5)]"
+                    ? "bg-gradient-to-r from-[oklch(0.65_0.25_290)] to-[oklch(0.55_0.2_250)] text-white hover:shadow-[0_0_25px_oklch(0.65_0.25_290/0.3)]"
+                    : "border border-[oklch(0.2_0.02_270/0.5)] text-[oklch(0.8_0.02_270)] hover:bg-[oklch(0.65_0.25_290/0.08)] hover:border-[oklch(0.65_0.25_290/0.3)]"
                 }`}
               >
                 {plan.cta}

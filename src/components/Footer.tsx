@@ -8,7 +8,6 @@ const footerLinks = [
       { label: "Chat", href: "/chat" },
       { label: "Images", href: "/image" },
       { label: "Pricing", href: "/pricing" },
-      { label: "API", href: "#" },
     ],
   },
   {
@@ -17,7 +16,6 @@ const footerLinks = [
       { label: "About", href: "#" },
       { label: "Blog", href: "#" },
       { label: "Careers", href: "#" },
-      { label: "Privacy", href: "#" },
     ],
   },
   {
@@ -26,7 +24,6 @@ const footerLinks = [
       { label: "Docs", href: "#" },
       { label: "FAQs", href: "#" },
       { label: "Status", href: "#" },
-      { label: "Changelog", href: "#" },
     ],
   },
 ]
@@ -38,7 +35,7 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[oklch(0.65_0.25_290)] to-[oklch(0.55_0.2_250)] flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[oklch(0.65_0.25_290)] to-[oklch(0.55_0.2_250)] flex items-center justify-center shadow-lg shadow-[oklch(0.65_0.25_290/0.2)]">
                 <Sparkles className="w-4 h-4 text-white" />
               </div>
               <span className="text-lg font-semibold">Zeno</span>
@@ -55,7 +52,7 @@ export default function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-sm text-[oklch(0.5_0.02_270)] hover:text-[oklch(0.9_0.02_270)] transition-colors"
+                      className="text-sm text-[oklch(0.5_0.02_270)] hover:text-[oklch(0.9_0.02_270)] transition-colors duration-200"
                     >
                       {link.label}
                     </Link>
