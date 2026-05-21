@@ -142,12 +142,6 @@ export default function ChatPage() {
     setStreaming(true)
     setStreamContent("")
 
-    if (!config.apiKey) {
-      setStreamContent("⚠️ **No API key configured.** Go to **Settings** to add one.\n\nOpenRouter has free models — just get a key at [openrouter.ai/keys](https://openrouter.ai/keys) and paste it in Settings.")
-      setStreaming(false)
-      return
-    }
-
     const currentConv = conversationsRef.current.find((c) => c.id === activeId)
     const allMessages = [...(currentConv?.messages || []), userMsg]
 

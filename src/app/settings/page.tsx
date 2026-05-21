@@ -84,7 +84,7 @@ export default function SettingsPage() {
 
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-sm font-medium">API Key</label>
+              <label className="text-sm font-medium">API Key <span className="text-[oklch(0.4_0.02_270)] font-normal">(optional for OpenRouter)</span></label>
               {currentProvider && (
                 <a
                   href={currentProvider.url}
@@ -101,7 +101,7 @@ export default function SettingsPage() {
               type="password"
               value={config.apiKey}
               onChange={(e) => setConfig({ ...config, apiKey: e.target.value })}
-              placeholder={config.provider === "openrouter" ? "sk-or-v1-..." : "sk-..."}
+              placeholder={config.provider === "openrouter" ? "Leave blank to use server key" : "sk-..."}
               className="w-full px-4 py-3 rounded-xl bg-[oklch(0.06_0.01_270)] border border-[oklch(0.2_0.02_270/0.5)] text-sm font-mono text-foreground placeholder-[oklch(0.4_0.02_270)] outline-none focus:border-[oklch(0.65_0.25_290/0.5)] transition-colors"
             />
           </div>
@@ -163,10 +163,9 @@ export default function SettingsPage() {
 
           <div className="rounded-xl bg-[oklch(0.65_0.25_290/0.08)] border border-[oklch(0.65_0.25_290/0.15)] p-4">
             <p className="text-xs text-[oklch(0.6_0.02_270)]">
-              <strong>Free option:</strong> Select OpenRouter, get a free API key from their site,
-              and use models with <code className="text-[oklch(0.65_0.25_290)]">:free</code> suffix
-              (e.g. <code className="text-[oklch(0.65_0.25_290)]">mistralai/mistral-7b-instruct:free</code>).
-              Your API key is stored locally in your browser and never sent to our servers.
+              <strong>Works out of the box!</strong> OpenRouter is pre-configured with a server-side key —
+              just select it and start using the app. If you want to use your own key or a different provider,
+              paste it above and it'll be stored locally in your browser.
             </p>
           </div>
         </div>

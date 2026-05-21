@@ -4,7 +4,8 @@ export async function POST(req: NextRequest) {
   try {
     const { messages, provider, apiKey, model } = await req.json()
 
-    if (!apiKey) {
+    const key = apiKey || (provider === "openrouter" ? process.env.OPENROUTER_API_KEY : "")
+    if (!key) {
       return Response.json({ error: "API key not configured" }, { status: 400 })
     }
 
@@ -22,7 +23,7 @@ export async function POST(req: NextRequest) {
 
     if (provider === "gemini") {
       const geminiModel = model || "gemini-2.0-flash"
-      const url = `${baseUrl}/models/${geminiModel}:generateContent?key=${apiKey}`
+      const url = `${baseUrl}/models/${geminiModel}:generateContent?key=${key}`
       const contents = messages.map((m: any) => ({
         role: m.role === "assistant" ? "model" : "user",
         parts: [{ text: m.content }],
@@ -48,7 +49,7 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${key}`,
         ...(provider === "openrouter"
           ? { "HTTP-Referer": "https://zeno-ai-wine.vercel.app", "X-Title": "Zeno AI" }
           : {}),

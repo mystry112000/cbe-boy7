@@ -23,12 +23,6 @@ export default function ImagePage() {
 
     const config = getConfig()
 
-    if (!config.apiKey) {
-      setError("No API key configured. Go to Settings to add one.")
-      setGenerating(false)
-      return
-    }
-
     try {
       const res = await fetch("/api/image", {
         method: "POST",

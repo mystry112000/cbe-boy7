@@ -4,6 +4,11 @@ export async function POST(req: NextRequest) {
   try {
     const { prompt, provider, apiKey, model, ratio } = await req.json()
 
+    const key = apiKey || (provider === "openrouter" ? process.env.OPENROUTER_API_KEY : "")
+    if (!key) {
+      return NextResponse.json({ error: "API key not configured. Add one in Settings." }, { status: 400 })
+    }
+
     const sizeMap: Record<string, string> = {
       "1:1": "1024x1024",
       "16:9": "1024x576",
@@ -12,10 +17,6 @@ export async function POST(req: NextRequest) {
       "3:4": "768x1024",
     }
     const size = sizeMap[ratio] || "1024x1024"
-
-    if (!apiKey) {
-      return NextResponse.json({ error: "API key not configured. Add one in Settings." }, { status: 400 })
-    }
 
     let baseUrl: string
     switch (provider) {
@@ -32,7 +33,7 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${key}`,
         ...(provider === "openrouter" ? { "HTTP-Referer": "https://zeno-ai-wine.vercel.app", "X-Title": "Zeno AI" } : {}),
       },
       body: JSON.stringify({
