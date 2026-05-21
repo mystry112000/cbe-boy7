@@ -80,7 +80,7 @@ export default function ChatPage() {
     if (parent && parent.scrollHeight - parent.scrollTop - parent.clientHeight < 200) {
       endRef.current.scrollIntoView({ behavior: "auto" })
     }
-  }, [messages, streamContent])
+  }, [streamContent])
 
   const activeConv = conversations.find((c) => c.id === activeId)
   const messages = activeConv?.messages || []
