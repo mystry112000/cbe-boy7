@@ -6,6 +6,14 @@ import { getConfig, saveConfig, type AIConfig } from "@/lib/ai"
 
 const providers = [
   {
+    id: "g4f" as const,
+    name: "GPT4Free (Local)",
+    desc: "Free AI using gpt4free — no API key needed, runs locally",
+    url: "",
+    defaultChat: "gpt-4o-mini",
+    defaultImage: "",
+  },
+  {
     id: "openrouter" as const,
     name: "OpenRouter",
     desc: "Access many models (including free ones) with one API",
@@ -84,31 +92,33 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-sm font-medium">API Key <span className="text-[oklch(0.4_0.02_270)] font-normal">(optional for OpenRouter)</span></label>
-              {currentProvider && (
-                <a
-                  href={currentProvider.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-[oklch(0.65_0.25_290)] hover:underline flex items-center gap-1"
-                >
-                  Get a {currentProvider.name} key
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              )}
+          {config.provider !== "g4f" && (
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-sm font-medium">API Key <span className="text-[oklch(0.4_0.02_270)] font-normal">(optional for OpenRouter)</span></label>
+                {currentProvider && (
+                  <a
+                    href={currentProvider.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-[oklch(0.65_0.25_290)] hover:underline flex items-center gap-1"
+                  >
+                    Get a {currentProvider.name} key
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                )}
+              </div>
+              <input
+                type="password"
+                value={config.apiKey}
+                onChange={(e) => setConfig({ ...config, apiKey: e.target.value })}
+                placeholder={config.provider === "openrouter" ? "Leave blank to use server key" : "sk-..."}
+                className="w-full px-4 py-3 rounded-xl bg-[oklch(0.06_0.01_270)] border border-[oklch(0.2_0.02_270/0.5)] text-sm font-mono text-foreground placeholder-[oklch(0.4_0.02_270)] outline-none focus:border-[oklch(0.65_0.25_290/0.4)] focus:shadow-[0_0_20px_oklch(0.65_0.25_290/0.08)] transition-all duration-200"
+              />
             </div>
-            <input
-              type="password"
-              value={config.apiKey}
-              onChange={(e) => setConfig({ ...config, apiKey: e.target.value })}
-              placeholder={config.provider === "openrouter" ? "Leave blank to use server key" : "sk-..."}
-              className="w-full px-4 py-3 rounded-xl bg-[oklch(0.06_0.01_270)] border border-[oklch(0.2_0.02_270/0.5)] text-sm font-mono text-foreground placeholder-[oklch(0.4_0.02_270)] outline-none focus:border-[oklch(0.65_0.25_290/0.4)] focus:shadow-[0_0_20px_oklch(0.65_0.25_290/0.08)] transition-all duration-200"
-            />
-          </div>
+          )}
 
-          {config.provider !== "gemini" && (
+          {config.provider !== "gemini" && config.provider !== "g4f" && (
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-2">Chat Model</label>
@@ -165,10 +175,11 @@ export default function SettingsPage() {
 
           <div className="rounded-xl bg-[oklch(0.65_0.25_290/0.08)] border border-[oklch(0.65_0.25_290/0.15)] p-4">
             <p className="text-xs text-[oklch(0.6_0.02_270)]">
-              <strong>Works out of the box!</strong> OpenRouter is pre-configured with a server-side key —
-              just select it and start using the app. Chat model <code className="text-[oklch(0.65_0.25_290)]">openrouter/free</code>
-              automatically routes to the best free model. If you want to use your own key or a different provider,
-              paste it above and it'll be stored locally in your browser.
+              <strong>GPT4Free (Local)</strong> — uses gpt4free to access AI models for free without any API key.
+              Requires Python and the <code className="text-[oklch(0.65_0.25_290)]">g4f</code> package installed locally.
+              Only works when running the app on your machine (not on Vercel).
+              <br /><br />
+              <strong>OpenRouter</strong> is pre-configured with a server-side key — just select it to use on the live site.
             </p>
           </div>
         </div>

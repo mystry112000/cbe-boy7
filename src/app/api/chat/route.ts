@@ -1,8 +1,15 @@
 import { NextRequest } from "next/server"
+import { spawn } from "child_process"
+import path from "path"
 
 export async function POST(req: NextRequest) {
   try {
     const { messages, provider, apiKey, model } = await req.json()
+
+    // g4f provider — uses local Python gpt4free bridge
+    if (provider === "g4f") {
+      return handleG4f(messages)
+    }
 
     const key = apiKey || (provider === "openrouter" ? process.env.OPENROUTER_API_KEY : "")
     if (!key) {
@@ -113,4 +120,60 @@ export async function POST(req: NextRequest) {
   } catch (err: any) {
     return Response.json({ error: err.message || "Internal server error" }, { status: 500 })
   }
+}
+
+function handleG4f(messages: { role: string; content: string }[]) {
+  const bridgePath = path.join(process.cwd(), "g4f_bridge.py")
+  const encoder = new TextEncoder()
+
+  const stream = new ReadableStream({
+    async start(controller) {
+      try {
+        const child = spawn("python", [bridgePath], {
+          stdio: ["pipe", "pipe", "pipe"],
+        })
+
+        child.stdin.write(JSON.stringify({ messages }))
+        child.stdin.end()
+
+        let buffer = ""
+
+        for await (const chunk of child.stdout) {
+          buffer += chunk.toString()
+          const lines = buffer.split("\n")
+          buffer = lines.pop() || ""
+
+          for (const line of lines) {
+            if (!line.trim()) continue
+            try {
+              const data = JSON.parse(line)
+              if (data.error) {
+                controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: data.error })}\n\n`))
+              } else if (data.content) {
+                controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content: data.content })}\n\n`))
+              }
+            } catch {}
+          }
+        }
+
+        child.stderr.on("data", (d) => {
+          console.error("g4f bridge stderr:", d.toString())
+        })
+
+        await new Promise<void>((resolve) => child.on("close", () => resolve()))
+      } catch (e) {
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: String(e) })}\n\n`))
+      }
+      controller.enqueue(encoder.encode("data: [DONE]\n\n"))
+      controller.close()
+    },
+  })
+
+  return new Response(stream, {
+    headers: {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      Connection: "keep-alive",
+    },
+  })
 }
