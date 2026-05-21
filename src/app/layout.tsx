@@ -24,6 +24,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <Navbar />
+        <div className="shooting-star" />
+        <div className="shooting-star" />
+        <div className="shooting-star" />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>
