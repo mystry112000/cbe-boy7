@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
-        ...(provider === "openrouter" ? { "HTTP-Referer": "https://zeno-ai.vercel.app", "X-Title": "Zeno AI" } : {}),
+        ...(provider === "openrouter" ? { "HTTP-Referer": "https://zeno-ai-wine.vercel.app", "X-Title": "Zeno AI" } : {}),
       },
       body: JSON.stringify({
         model: model || "dall-e-3",
