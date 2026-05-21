@@ -38,6 +38,7 @@ export default function ImagePage() {
           provider: config.provider,
           apiKey: config.apiKey,
           model: config.imageModel,
+          ratio,
         }),
       })
 
@@ -50,6 +51,21 @@ export default function ImagePage() {
     } finally {
       setGenerating(false)
     }
+  }
+
+  async function handleDownload(imgUrl: string) {
+    try {
+      const res = await fetch(imgUrl)
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = "zeno-image.png"
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    } catch {}
   }
 
   return (
@@ -77,13 +93,12 @@ export default function ImagePage() {
                     <div key={i} className="relative group rounded-xl overflow-hidden aspect-square bg-[oklch(0.06_0.01_270)]">
                       <img src={img} alt="" className="w-full h-full object-cover" />
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <a
-                          href={img}
-                          download
+                        <button
+                          onClick={() => handleDownload(img)}
                           className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
                         >
                           <Download className="w-4 h-4" />
-                        </a>
+                        </button>
                       </div>
                     </div>
                   ))}

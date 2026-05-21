@@ -111,6 +111,7 @@ export default function ChatPage() {
       if (next.length === 0) {
         const chat = newConversation()
         saveConversations([chat])
+        setActiveId(chat.id)
         return [chat]
       }
       saveConversations(next)

@@ -2,7 +2,16 @@ import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(req: NextRequest) {
   try {
-    const { prompt, provider, apiKey, model } = await req.json()
+    const { prompt, provider, apiKey, model, ratio } = await req.json()
+
+    const sizeMap: Record<string, string> = {
+      "1:1": "1024x1024",
+      "16:9": "1024x576",
+      "9:16": "576x1024",
+      "4:3": "1024x768",
+      "3:4": "768x1024",
+    }
+    const size = sizeMap[ratio] || "1024x1024"
 
     if (!apiKey) {
       return NextResponse.json({ error: "API key not configured. Add one in Settings." }, { status: 400 })
@@ -30,7 +39,7 @@ export async function POST(req: NextRequest) {
         model: model || "dall-e-3",
         prompt,
         n: 4,
-        size: "1024x1024",
+        size,
       }),
     })
 
