@@ -10,7 +10,7 @@ const providers = [
     name: "OpenRouter",
     desc: "Access many models (including free ones) with one API",
     url: "https://openrouter.ai/keys",
-    defaultChat: "google/gemma-4-26b-a4b-it:free",
+    defaultChat: "liquid/lfm-2.5-1.2b-instruct:free",
     defaultImage: "black-forest-labs/flux-schnell",
   },
   {
