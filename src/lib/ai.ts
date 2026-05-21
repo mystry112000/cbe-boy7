@@ -8,7 +8,7 @@ export interface AIConfig {
 const DEFAULTS: AIConfig = {
   provider: "openrouter",
   apiKey: "",
-  chatModel: "liquid/lfm-2.5-1.2b-instruct:free",
+  chatModel: "openai/gpt-oss-20b:free",
   imageModel: "black-forest-labs/flux-schnell",
 }
 
