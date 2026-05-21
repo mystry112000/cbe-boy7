@@ -1,7 +1,5 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  outputFileTracingRoot: process.cwd(),
-};
+const nextConfig: NextConfig = {};
 
 export default nextConfig;
