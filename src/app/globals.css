@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: oklch(0.021 0.008 270);
+  --color-foreground: oklch(0.97 0.01 270);
+  --color-primary: oklch(0.65 0.25 290);
+  --color-primary-light: oklch(0.75 0.2 290);
+  --color-primary-dark: oklch(0.5 0.25 290);
+  --color-accent: oklch(0.6 0.2 250);
+  --color-muted: oklch(0.3 0.05 270);
+  --color-card: oklch(0.09 0.01 270 / 0.5);
+  --color-border: oklch(0.2 0.02 270 / 0.5);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  --background: oklch(0.021 0.008 270);
+  --foreground: oklch(0.97 0.01 270);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.glow {
+  box-shadow: 0 0 60px oklch(0.65 0.25 290 / 0.15),
+              0 0 120px oklch(0.6 0.2 250 / 0.1);
+}
+
+.glow-text {
+  text-shadow: 0 0 40px oklch(0.65 0.25 290 / 0.3);
+}
+
+.gradient-border {
+  position: relative;
+}
+
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, oklch(0.65 0.25 290 / 0.5), oklch(0.6 0.2 250 / 0.3), transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.grid-bg {
+  background-image: linear-gradient(oklch(0.2 0.02 270 / 0.1) 1px, transparent 1px),
+                    linear-gradient(90deg, oklch(0.2 0.02 270 / 0.1) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
