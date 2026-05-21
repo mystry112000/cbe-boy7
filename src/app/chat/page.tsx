@@ -53,11 +53,14 @@ export default function ChatPage() {
   const [input, setInput] = useState("")
   const [streaming, setStreaming] = useState(false)
   const [streamContent, setStreamContent] = useState("")
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(() => typeof window !== "undefined" ? window.innerWidth >= 768 : true)
   const endRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
   const abortRef = useRef<AbortController | null>(null)
   const conversationsRef = useRef(conversations)
+
+  const activeConv = conversations.find((c) => c.id === activeId)
+  const messages = activeConv?.messages || []
 
   useEffect(() => { conversationsRef.current = conversations }, [conversations])
 
@@ -80,10 +83,7 @@ export default function ChatPage() {
     if (parent && parent.scrollHeight - parent.scrollTop - parent.clientHeight < 200) {
       endRef.current.scrollIntoView({ behavior: "auto" })
     }
-  }, [streamContent])
-
-  const activeConv = conversations.find((c) => c.id === activeId)
-  const messages = activeConv?.messages || []
+  }, [streamContent, messages])
 
   function updateConversation(id: string, updater: (c: Conversation) => Conversation) {
     setConversations((prev) => {
@@ -242,30 +242,33 @@ export default function ChatPage() {
   return (
     <div className="min-h-screen pt-16 flex">
       {sidebarOpen && (
-        <div className="w-64 border-r border-[oklch(0.2_0.02_270/0.5)] bg-[oklch(0.04_0.005_270)] flex flex-col">
-          <div className="p-3 border-b border-[oklch(0.2_0.02_270/0.5)]">
-            <button onClick={handleNewChat} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-[oklch(0.2_0.02_270/0.5)] text-sm text-[oklch(0.5_0.02_270)] hover:bg-[oklch(0.09_0.01_270/0.5)] hover:text-[oklch(0.8_0.02_270)] transition-all">
-              <Plus className="w-4 h-4" />
-              New chat
-            </button>
+        <>
+          <div className="fixed inset-0 bg-black/50 z-30 md:hidden" onClick={() => setSidebarOpen(false)} />
+          <div className="w-64 border-r border-[oklch(0.2_0.02_270/0.5)] bg-[oklch(0.04_0.005_270)] flex flex-col fixed md:relative z-40 inset-y-0 left-0 pt-16 md:pt-0">
+            <div className="p-3 border-b border-[oklch(0.2_0.02_270/0.5)]">
+              <button onClick={handleNewChat} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-[oklch(0.2_0.02_270/0.5)] text-sm text-[oklch(0.5_0.02_270)] hover:bg-[oklch(0.09_0.01_270/0.5)] hover:text-[oklch(0.8_0.02_270)] transition-all">
+                <Plus className="w-4 h-4" />
+                New chat
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-2 space-y-1 scrollbar-hide">
+              {conversations.map((conv) => (
+                <div key={conv.id} onClick={() => { setActiveId(conv.id); setStreamContent(""); window.innerWidth < 768 && setSidebarOpen(false) }} className={`group flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-sm transition-colors ${conv.id === activeId ? "bg-[oklch(0.65_0.25_290/0.1)] text-[oklch(0.85_0.02_270)]" : "text-[oklch(0.5_0.02_270)] hover:bg-[oklch(0.09_0.01_270/0.5)]"}`}>
+                  <span className="truncate flex-1">{conv.title}</span>
+                  {(
+                    <button onClick={(e) => { e.stopPropagation(); handleDeleteChat(conv.id) }} className="opacity-0 group-hover:opacity-100 text-[oklch(0.3_0.02_270)] hover:text-red-400 transition-all text-xs">✕</button>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="p-3 border-t border-[oklch(0.2_0.02_270/0.5)]">
+              <Link href="/settings" className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-[oklch(0.5_0.02_270)] hover:bg-[oklch(0.09_0.01_270/0.5)] hover:text-[oklch(0.8_0.02_270)] transition-all">
+                <Settings className="w-4 h-4" />
+                Settings
+              </Link>
+            </div>
           </div>
-          <div className="flex-1 overflow-y-auto p-2 space-y-1 scrollbar-hide">
-            {conversations.map((conv) => (
-              <div key={conv.id} onClick={() => { setActiveId(conv.id); setStreamContent("") }} className={`group flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-sm transition-colors ${conv.id === activeId ? "bg-[oklch(0.65_0.25_290/0.1)] text-[oklch(0.85_0.02_270)]" : "text-[oklch(0.5_0.02_270)] hover:bg-[oklch(0.09_0.01_270/0.5)]"}`}>
-                <span className="truncate flex-1">{conv.title}</span>
-                {(
-                  <button onClick={(e) => { e.stopPropagation(); handleDeleteChat(conv.id) }} className="opacity-0 group-hover:opacity-100 text-[oklch(0.3_0.02_270)] hover:text-red-400 transition-all text-xs">✕</button>
-                )}
-              </div>
-            ))}
-          </div>
-          <div className="p-3 border-t border-[oklch(0.2_0.02_270/0.5)]">
-            <Link href="/settings" className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-[oklch(0.5_0.02_270)] hover:bg-[oklch(0.09_0.01_270/0.5)] hover:text-[oklch(0.8_0.02_270)] transition-all">
-              <Settings className="w-4 h-4" />
-              Settings
-            </Link>
-          </div>
-        </div>
+        </>
       )}
 
       <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full px-4">
@@ -325,7 +328,7 @@ export default function ChatPage() {
 
         <div className="py-4 border-t border-[oklch(0.2_0.02_270/0.5)]">
           <div className="flex gap-3">
-            <input ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend() } }} placeholder={streaming ? "AI is responding..." : "Type a message..."} disabled={streaming} className="flex-1 px-4 py-3 rounded-xl bg-[oklch(0.09_0.01_270/0.5)] border border-[oklch(0.2_0.02_270/0.5)] text-sm text-foreground placeholder-[oklch(0.4_0.02_270)] outline-none focus:border-[oklch(0.65_0.25_290/0.5)] transition-colors disabled:opacity-50" />
+            <textarea ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend() } }} placeholder={streaming ? "AI is responding..." : "Type a message..."} disabled={streaming} rows={1} className="flex-1 px-4 py-3 rounded-xl bg-[oklch(0.09_0.01_270/0.5)] border border-[oklch(0.2_0.02_270/0.5)] text-sm text-foreground placeholder-[oklch(0.4_0.02_270)] outline-none focus:border-[oklch(0.65_0.25_290/0.5)] transition-colors disabled:opacity-50 resize-none" />
             {streaming ? (
               <button onClick={handleStop} className="px-4 py-3 rounded-xl bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30 transition-all">■</button>
             ) : (
