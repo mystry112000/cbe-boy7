@@ -26,9 +26,11 @@ html {
 body {
   background: var(--background);
   background-image:
-    radial-gradient(ellipse at 20% 50%, oklch(0.65 0.25 290 / 0.04) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, oklch(0.55 0.2 250 / 0.04) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 80%, oklch(0.7 0.2 150 / 0.03) 0%, transparent 50%);
+    radial-gradient(ellipse at 20% 30%, oklch(0.65 0.25 290 / 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, oklch(0.55 0.2 250 / 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, oklch(0.7 0.2 150 / 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 10% 70%, oklch(0.65 0.25 290 / 0.06) 0%, transparent 40%),
+    radial-gradient(ellipse at 90% 60%, oklch(0.55 0.2 250 / 0.06) 0%, transparent 40%);
   color: var(--foreground);
   background-attachment: fixed;
 }
@@ -40,24 +42,37 @@ body::before {
   pointer-events: none;
   z-index: -1;
   background-image:
-    radial-gradient(2px 2px at 10% 20%, oklch(0.65 0.25 290 / 0.15), transparent),
-    radial-gradient(2px 2px at 30% 60%, oklch(0.55 0.2 250 / 0.1), transparent),
-    radial-gradient(2px 2px at 50% 10%, oklch(0.65 0.25 290 / 0.12), transparent),
-    radial-gradient(2px 2px at 70% 80%, oklch(0.55 0.2 250 / 0.1), transparent),
-    radial-gradient(2px 2px at 90% 40%, oklch(0.7 0.2 150 / 0.08), transparent),
-    radial-gradient(2px 2px at 15% 85%, oklch(0.65 0.25 290 / 0.1), transparent),
-    radial-gradient(2px 2px at 60% 55%, oklch(0.55 0.2 250 / 0.08), transparent),
-    radial-gradient(2px 2px at 85% 15%, oklch(0.7 0.2 150 / 0.1), transparent);
-  background-size: 200px 200px;
-  animation: drift 30s linear infinite;
+    radial-gradient(3px 3px at 10% 20%, oklch(0.65 0.25 290 / 0.4), transparent),
+    radial-gradient(3px 3px at 30% 60%, oklch(0.55 0.2 250 / 0.35), transparent),
+    radial-gradient(4px 4px at 50% 10%, oklch(0.65 0.25 290 / 0.3), transparent),
+    radial-gradient(3px 3px at 70% 80%, oklch(0.55 0.2 250 / 0.35), transparent),
+    radial-gradient(4px 4px at 90% 40%, oklch(0.7 0.2 150 / 0.3), transparent),
+    radial-gradient(3px 3px at 15% 85%, oklch(0.65 0.25 290 / 0.35), transparent),
+    radial-gradient(4px 4px at 60% 55%, oklch(0.55 0.2 250 / 0.3), transparent),
+    radial-gradient(3px 3px at 85% 15%, oklch(0.7 0.2 150 / 0.35), transparent),
+    radial-gradient(4px 4px at 25% 40%, oklch(0.65 0.25 290 / 0.25), transparent),
+    radial-gradient(3px 3px at 75% 90%, oklch(0.55 0.2 250 / 0.3), transparent),
+    radial-gradient(4px 4px at 45% 70%, oklch(0.65 0.25 290 / 0.25), transparent),
+    radial-gradient(3px 3px at 95% 30%, oklch(0.7 0.2 150 / 0.3), transparent);
+  background-size: 120px 120px;
+  animation: drift 40s linear infinite;
 }
 
 @keyframes drift {
   0% { transform: translate(0, 0); }
-  25% { transform: translate(10px, -10px); }
-  50% { transform: translate(-5px, 15px); }
-  75% { transform: translate(8px, 5px); }
+  25% { transform: translate(15px, -10px); }
+  50% { transform: translate(-8px, 18px); }
+  75% { transform: translate(10px, 6px); }
   100% { transform: translate(0, 0); }
+}
+
+@keyframes border-glow {
+  0%, 100% { border-color: oklch(0.65 0.25 290 / 0.2); box-shadow: 0 0 15px oklch(0.65 0.25 290 / 0.05); }
+  50% { border-color: oklch(0.65 0.25 290 / 0.4); box-shadow: 0 0 30px oklch(0.65 0.25 290 / 0.12); }
+}
+
+.card-glow {
+  animation: border-glow 4s ease-in-out infinite;
 }
 
 ::-webkit-scrollbar {
